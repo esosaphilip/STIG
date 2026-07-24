@@ -1,24 +1,33 @@
-# main.py
-from document_loader import DocumentLoader
-from text_splitter import StigTextSplitter
-from embedding_agent import StigEmbeddingAgent
-from vector_database import StigVectorDatabase
+# api/main.py
+from fastapi import FastAPI
+from pydantic import BaseModel
+from core.rag_chain import StigRAGChain
 
-# Step 1 — Load
-loader = DocumentLoader(source_type="wikipedia", source_path="Nigerian Civil War")
-documents = loader.load()
+# create the app
+app = FastAPI()
 
-# Step 2 — Chunk
-splitter = StigTextSplitter(chunk_size=500, chunk_overlap=50)
-chunks = splitter.split(documents)
+# create the RAG chain once when the app starts
+rag = StigRAGChain()
 
-# Step 3 — Embed + Store (these two happen together inside Chroma)
-embedding_agent = StigEmbeddingAgent()
-db = StigVectorDatabase(embedding_agent=embedding_agent)
-db.create_vectorstore(chunks)
+# define what the incoming request looks like
+class QuestionRequest(BaseModel):
+    # what field goes here?
+    question: str
 
-# Step 4 — Query
-results = db.similarity_search("What caused the Nigerian Civil War?")
-for r in results:
-    print(r.page_content)
-    print("---")
+
+@app.get("/health")
+def health_check():
+    return {"status": "ok"}
+
+@app.get("/")
+def greet():
+    return {"message": "Welcome to STIG"}
+
+
+# define the endpoint
+@app.post("/ask")
+def ask_question(request: QuestionRequest):
+    # step 1 - call the right method on the right class
+    answer = rag.answer_question(request.question)
+    # step 2 - return the answer
+    return {"answer": answer}

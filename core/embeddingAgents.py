@@ -1,13 +1,13 @@
 import os
-from langchain_openai import OpenAIEmbeddings
+from langchain_ollama import OllamaEmbeddings
 from dotenv import load_dotenv
 
 load_dotenv()
 
 class StigEmbeddingAgent:
-    def __init__(self, model_name="text-embedding-ada-002"):
+    def __init__(self, model_name="nomic-embed-text"):
         self.model_name = model_name
-        self.embeddings = OpenAIEmbeddings(model=self.model_name)
+        self.embeddings = OllamaEmbeddings(model=self.model_name)
 
     def get_embedding(self, text):
         """Embed a single string — useful for testing"""

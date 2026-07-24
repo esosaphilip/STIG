@@ -1,14 +1,14 @@
 # core/rag_chain.py
-from core.vector_database import StigVectorDatabase
+from core.vectordb import StigVectorDatabase
 from core.llm_agent import StigLLMAgent
-from core.embedding_agent import StigEmbeddingAgent
+from core.embeddingAgents import StigEmbeddingAgent
 
 
 
 
 
 # Python convention
-DEFAULT_MODEL = "claude-3-5-sonnet-20241022"
+DEFAULT_MODEL = "mistral"
 
 
 
@@ -24,7 +24,7 @@ class StigRAGChain:
         self.embedding_agent = StigEmbeddingAgent()
         self.vector_db = StigVectorDatabase(self.embedding_agent, persist_directory)
         self.vector_db.load_vectorstore()
-        self.llm_agent = StigLLMAgent(model_name=model_name)
+        self.llm_agent = StigLLMAgent()
 
     def answer_question(self, question: str) -> str:
         """Answer a question using the RAG approach"""

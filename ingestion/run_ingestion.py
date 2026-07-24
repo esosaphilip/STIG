@@ -1,23 +1,25 @@
 # ingestion/run_ingestion.py
-from core.document_loader import DocumentLoader
+from core.documentIngestion import Documentloader
 from core.TextSplitter import StigTextSplitter
 from core.embeddingAgents import StigEmbeddingAgent
 from core.vectordb import StigVectorDatabase
+import traceback
+
 
 # a list of Nigerian history topics to load from Wikipedia
 NIGERIAN_HISTORY_TOPICS = [
     # add 5 Wikipedia topics here yourself
     # think about what STIG should know about
-    "the history of Nigeria", 
-    "the Nigerian Civil War", 
-    "the transatlantic slave trade in Nigeria", 
-    "the colonial period in Nigeria", 
-    "the independence movement in Nigeria",
-    "Obasanjo's presidency",
-    "Sani Abacha's regime",
-    "abdulsalem Abubakar's transitional government",
-    "the First Republic of Nigeria",
-    "the Second Republic of Nigeria",
+    "history of Nigeria", 
+    "Nigerian Civil War", 
+    "Slavery in Nigeria", 
+    "colonial Nigeria", 
+    "Independence Day (Nigeria)",
+    "Olusegun Obasanjo",
+    "Sani Abacha",
+    "Abdulsalami Abubakar",
+    "First Nigerian Republic",
+    "Second Nigerian Republic",
 ]
 
 def run_ingestion():
@@ -31,8 +33,8 @@ def run_ingestion():
         try:
             print(f"Starting ingestion for topic: {topic}")
             # step 3 - load the documents for this topic
-            loader = DocumentLoader("wikipedia", topic)
-            documents = loader.load()
+            loader = Documentloader("wikipedia", topic)
+            documents = loader.load_documents()
 
             # step 4 - split the documents into chunks
             chunks = splitter.split(documents)
@@ -45,6 +47,7 @@ def run_ingestion():
             print(f"Finished ingesting topic: {topic}")
         except Exception as e:
             print(f"Error ingesting topic {topic}: {e}")
+            traceback.print_exc()
             continue
 
 
