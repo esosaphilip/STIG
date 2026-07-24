@@ -1,11 +1,10 @@
+import requests
 from langchain_community.document_loaders import (
-    WikipediaLoader,
     WebBaseLoader,
     PyPDFLoader,
     TextLoader,
     CSVLoader
 )
-import requests
 from langchain_core.documents import Document
 
 
@@ -15,17 +14,51 @@ class Documentloader:
         self.source_path = source_path
 
     def load_documents(self):
-        # inside load_documents(), replace the wikipedia case:
         if self.source_type == "wikipedia":
-            url = "https://en.wikipedia.org/api/rest_v1/page/summary/" + self.source_path.replace(" ", "_")
-            headers = {"User-Agent": "STIG/1.0"}
-            response = requests.get(url, headers=headers)
+            # 1. Endpoint without the trailing slash
+            url = "https://en.wikipedia.org/w/api.php"
+            params = {
+                "action": "query",
+                "format": "json",
+                "prop": "extracts",
+                "explaintext": True,      # Plain text instead of HTML
+                "titles": self.source_path,
+                "redirects": 1,           # Automatically follow page redirects
+            }
+            
+            # Wikipedia requires a descriptive User-Agent header
+            headers = {"User-Agent": "STIG/1.0 (contact@example.com)"}
+            
+            response = requests.get(url, headers=headers, params=params)
+            response.raise_for_status()
             data = response.json()
-            text = data.get("extract", "")
-            return [Document(
-                page_content=text,
-                metadata={"source": url, "title": self.source_path}
-            )]
+
+            # 2. Extract pages from the nested response
+            pages = data.get("query", {}).get("pages", {})
+            
+            documents = []
+            for page_id, page_info in pages.items():
+                # -1 indicates the page was not found
+                if page_id == "-1":
+                    continue
+                
+                text = page_info.get("extract", "")
+                title = page_info.get("title", self.source_path)
+                
+                if text:
+                    documents.append(
+                        Document(
+                            page_content=text,
+                            metadata={
+                                "source": f"https://en.wikipedia.org/wiki/{title.replace(' ', '_')}",
+                                "title": title,
+                                "page_id": page_id
+                            }
+                        )
+                    )
+            
+            return documents
+
         elif self.source_type == "web":
             loader = WebBaseLoader(self.source_path)
         elif self.source_type == "pdf":
