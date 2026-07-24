@@ -1,4 +1,16 @@
-# Environments
+# Environment variables
 .env
-.venv
-.stig-env
+
+# Virtual environment
+stig-env/
+.venv/
+
+# Vector database
+db/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# VS Code
+.vscode/
