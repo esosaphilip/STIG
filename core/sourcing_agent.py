@@ -73,11 +73,10 @@ def search_web(state: PoliticianState) -> dict:
     # 2. create Tavily client using env variable
     tavily_client = TavilyClient(api_key=os.getenv("TAVILY_API_KEY"))
     # 3. search for politician scandals and news
-    scandal_query = f"{politician_name} Nigeria politician scandal court"
-    news_query = f"{politician_name} Nigeria politician news"
-    # search query should be: "{name} Nigeria politician scandal court"
-    response = tavily_client.search(query=f"{politician_name} Nigeria politician scandal court", limit=10)
-    
+    response = tavily_client.search(
+    query=f'"{politician_name}" Nigeria politician scandal history',
+    limit=10
+    )
     # 4. extract content from results
     # result["results"] is a list
     # each item has "content" and "url"

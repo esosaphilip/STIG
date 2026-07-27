@@ -14,10 +14,22 @@ from core.rag_chain import StigRAGChain
 from data.cache import StigCache
 from core.sourcing_agent import create_sourcing_agent
 from core.sourcing_agent import PoliticianState  # Ensure PoliticianState is imported
-
+from fastapi.middleware.cors import CORSMiddleware
 
 # create the app
 app = FastAPI()
+
+
+# Add this AFTER app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # allows all origins including file://
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+
 
 # create the RAG chain once when the app starts
 rag = StigRAGChain()

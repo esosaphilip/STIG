@@ -29,7 +29,7 @@ class StigRAGChain:
     def answer_question(self, question: str) -> str:
         """Answer a question using the RAG approach"""
         # Step 1: Retrieve relevant context chunks from the vector database
-        context_chunks = self.vector_db.similarity_search(question, k=3)
+        context_chunks = self.vector_db.similarity_search(question, k=5)
 
         # Step 2: Use the LLM agent to generate an answer based on the retrieved context
         answer = self.llm_agent.answer(question, context_chunks)
