@@ -7,13 +7,16 @@ import os
 from dotenv import load_dotenv
 from core.llm_agent import StigLLMAgent
 import json
+from requests.exceptions import HTTPError
+import time
 
 load_dotenv()  # Load environment variables from .env file
 
 # Step 1 — Define the State Schema
 class PoliticianState(TypedDict):
     name: str
-    age: str
+    date_of_birth: str
+    date_of_death: str
     state_of_origin: str
     party: str
     offices_held: list[str]
@@ -38,26 +41,25 @@ class PoliticianState(TypedDict):
 def search_wikipedia(state: PoliticianState) -> dict:
     politician_name = state["name"]
     
-    # 1. Instantiate loader using the name from current state
-    loader = Documentloader(source_type="wikipedia", source_path=politician_name)
+    try:
+        loader = Documentloader(source_type="wikipedia", source_path=politician_name)
+        docs = loader.load_documents()
+        extracted_text = "\n\n".join([doc.page_content for doc in docs]) if docs else ""
+        new_sources = [
+            doc.metadata.get("source", f"https://en.wikipedia.org/wiki/{politician_name.replace(' ', '_')}")
+            for doc in docs
+        ]
+    except HTTPError as e:
+        # rate limited — return empty so agent can continue with web search
+        print(f"Wikipedia rate limited: {e}")
+        extracted_text = ""
+        new_sources = []
     
-    # 2. Extract documents
-    docs = loader.load_documents()
-    
-    # Combine page content from returned documents
-    extracted_text = "\n\n".join([doc.page_content for doc in docs]) if docs else ""
-    
-    # Collect updated sources from document metadata if available, or build fallbacks
-    new_sources = [
-        doc.metadata.get("source", f"https://en.wikipedia.org/wiki/{politician_name.replace(' ', '_')}")
-        for doc in docs
-    ]
-    
-    # 3. Return only the updated state fields
     return {
         "raw_wikipedia_text": extracted_text,
         "sources": state.get("sources", []) + new_sources
     }
+
 
 # Step 3 — define Node 2 (Tavily web search)
 def search_web(state: PoliticianState) -> dict:
@@ -100,13 +102,14 @@ def extract_profile(state: PoliticianState) -> dict:
     Extract information about this politician from the text below.
     Return ONLY a valid JSON object with these fields:
     - name
-    - age
+    - date_of_birth
+    - date_of_death
     - state_of_origin
-    - party
+    - party: political party name, or "Military" if military ruler, or "Independent" if none
     - offices_held (list)
     - scandals (list)
     - court_cases (list)
-    - allies (list)
+    - allies(people who supported, worked with, or were loyal to this politician) (list)
     - enemies (list)
     - notable_statements (list)
     - any_other_interesting_facts (list)
@@ -169,7 +172,8 @@ if __name__ == "__main__":
     # run it with a starting state
     result = agent.invoke({
         "name": "Sani Abacha",
-        "age": "",
+        "date_of_birth": "",
+        "date_of_death": "",
         "state_of_origin": "",
         "party": "",
         "offices_held": [],
