@@ -12,7 +12,8 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from core.rag_chain import StigRAGChain
 from data.cache import StigCache
-
+from core.sourcing_agent import create_sourcing_agent
+from core.sourcing_agent import PoliticianState  # Ensure PoliticianState is imported
 
 
 # create the app
@@ -49,3 +50,43 @@ def ask_question(request: QuestionRequest):
         return {"answer": answer, "cached": False}  # cached: False?
     except Exception as e:
         return {"error": str(e)}  # catch all exceptions here
+    
+    # define what the incoming request looks like
+class InfoRequest(BaseModel):
+    # what field goes here?
+    name: str
+    
+# define the endpoint
+@app.post("/infocard")
+def get_infocard(request: InfoRequest):
+    # step 1 - create the sourcing agent
+    agent = create_sourcing_agent()
+    # step 2 - invoke it with the politician name
+
+    politician_state = {
+        "name": request.name,
+        "date_of_birth": "",
+        "date_of_death": "",
+        "state_of_origin": "",
+        "party": "",
+        "offices_held": [],
+        "tenure_dates": [],
+        "scandals": [],
+        "court_cases": [],
+        "associations": [],
+        "allies": [],
+        "enemies": [],
+        "business_partners": [],
+        "notable_statements": [],
+        "social_media": {},
+        "old_politicians_newspaper_appearances": [],
+        "any_other_interesting_facts": [],
+        "news_mentions": [],
+        "raw_wikipedia_text": "",
+        "raw_news_text": "",
+        "sources": []
+    }
+    result = agent.invoke(politician_state)
+   
+    # step 3 - return the result
+    return result
