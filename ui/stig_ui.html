@@ -6,12 +6,10 @@
   <title>STIG — Sovereign Truth & Intelligence Gateway</title>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
-    /* ── Design Tokens ── */
     :root {
-      --navy:       #0A1628;
       --blue:       #0066FF;
       --blue-light: #E8F0FF;
-      --blue-dim:   #3385FF;
+      --navy:       #0A1628;
       --red:        #CC0000;
       --white:      #FFFFFF;
       --off-white:  #F7F9FC;
@@ -19,10 +17,8 @@
       --text:       #0A1628;
       --text-muted: #5A6A8A;
       --mono:       'IBM Plex Mono', monospace;
-      --sans:       'IBM Plex Sans', sans-serif;
     }
 
-    /* ── Reset ── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { height: 100%; }
     body {
@@ -34,7 +30,152 @@
       min-height: 100vh;
     }
 
-    /* ── Navigation ── */
+    /* ── VIEWS ── */
+    .view { display: none; flex-direction: column; min-height: 100vh; }
+    .view.active { display: flex; }
+
+    /* ══════════════════════════════
+       HOME SCREEN
+    ══════════════════════════════ */
+    #view-home {
+      align-items: center;
+      justify-content: center;
+      background: var(--white);
+      position: relative;
+    }
+
+    .home-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--blue-light) 1px, transparent 1px),
+        linear-gradient(90deg, var(--blue-light) 1px, transparent 1px);
+      background-size: 40px 40px;
+      opacity: 0.5;
+    }
+
+    .home-content {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .home-logo-box {
+      width: 120px;
+      height: 120px;
+      border: 4px solid var(--blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 72px;
+      font-weight: 700;
+      color: var(--blue);
+      animation: pulse-border 3s ease-in-out infinite;
+    }
+
+    @keyframes pulse-border {
+      0%, 100% { border-color: var(--blue); box-shadow: 0 0 0 0 rgba(0,102,255,0.2); }
+      50% { border-color: var(--navy); box-shadow: 0 0 0 8px rgba(0,102,255,0); }
+    }
+
+    .home-title {
+      font-size: 48px;
+      font-weight: 700;
+      letter-spacing: 16px;
+      color: var(--navy);
+    }
+
+    .home-subtitle {
+      font-size: 13px;
+      letter-spacing: 3px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .home-tagline {
+      font-size: 22px;
+      font-weight: 500;
+      color: var(--navy);
+      letter-spacing: 1px;
+      margin-top: 8px;
+    }
+
+    .home-tagline span {
+      color: var(--blue);
+    }
+
+    .home-divider {
+      width: 60px;
+      height: 2px;
+      background: var(--blue);
+    }
+
+    .home-buttons {
+      display: flex;
+      gap: 16px;
+      margin-top: 8px;
+    }
+
+    .home-btn {
+      padding: 16px 48px;
+      font-family: var(--mono);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      cursor: pointer;
+      border: 2px solid var(--navy);
+      transition: all 0.2s ease;
+    }
+
+    .home-btn-primary {
+      background: var(--blue);
+      color: var(--white);
+      border-color: var(--blue);
+    }
+
+    .home-btn-primary:hover {
+      background: var(--navy);
+      border-color: var(--navy);
+    }
+
+    .home-btn-secondary {
+      background: var(--white);
+      color: var(--navy);
+    }
+
+    .home-btn-secondary:hover {
+      background: var(--navy);
+      color: var(--white);
+    }
+
+    .home-footer {
+      position: absolute;
+      bottom: 24px;
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--text-muted);
+    }
+
+    .home-classification {
+      position: absolute;
+      top: 24px;
+      right: 32px;
+      font-size: 11px;
+      letter-spacing: 2px;
+      border: 1px solid var(--blue);
+      padding: 4px 12px;
+      color: var(--blue);
+    }
+
+    /* ══════════════════════════════
+       MAIN APP
+    ══════════════════════════════ */
+    #view-app { flex-direction: column; }
+
     nav {
       display: flex;
       align-items: center;
@@ -52,6 +193,13 @@
       display: flex;
       align-items: center;
       gap: 12px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .nav-logo:hover .logo-box {
+      background: var(--blue);
+      color: var(--white);
     }
 
     .logo-box {
@@ -64,7 +212,7 @@
       font-size: 20px;
       font-weight: 700;
       color: var(--blue);
-      letter-spacing: -1px;
+      transition: all 0.15s;
     }
 
     .logo-text h1 {
@@ -78,12 +226,10 @@
       font-size: 9px;
       letter-spacing: 2px;
       color: var(--text-muted);
-      text-transform: uppercase;
     }
 
     .nav-tabs {
       display: flex;
-      gap: 0;
       border: 1px solid var(--navy);
     }
 
@@ -95,23 +241,14 @@
       letter-spacing: 2px;
       border: none;
       cursor: pointer;
-      transition: all 0.15s ease;
+      transition: all 0.15s;
       background: var(--white);
       color: var(--navy);
     }
 
-    .nav-tab:first-child {
-      border-right: 1px solid var(--navy);
-    }
-
-    .nav-tab.active {
-      background: var(--blue);
-      color: var(--white);
-    }
-
-    .nav-tab:hover:not(.active) {
-      background: var(--blue-light);
-    }
+    .nav-tab:first-child { border-right: 1px solid var(--navy); }
+    .nav-tab.active { background: var(--blue); color: var(--white); }
+    .nav-tab:hover:not(.active) { background: var(--blue-light); }
 
     .nav-right {
       display: flex;
@@ -119,11 +256,7 @@
       gap: 16px;
     }
 
-    .session-id {
-      font-size: 11px;
-      letter-spacing: 1px;
-      color: var(--text-muted);
-    }
+    .session-id { font-size: 11px; letter-spacing: 1px; color: var(--text-muted); }
 
     .clearance-badge {
       border: 1px solid var(--blue);
@@ -134,21 +267,14 @@
       color: var(--blue);
     }
 
-    /* ── Main Layout ── */
-    .main {
-      display: flex;
-      flex: 1;
-      gap: 0;
-    }
+    .main { display: flex; flex: 1; }
 
-    /* ── Content Area ── */
     .content {
       flex: 1;
       padding: 32px;
       border-right: 1px solid var(--border);
     }
 
-    /* ── Sidebar ── */
     .sidebar {
       width: 280px;
       padding: 24px;
@@ -166,17 +292,9 @@
       gap: 8px;
     }
 
-    .sidebar-title::before {
-      content: '■';
-      color: var(--blue);
-      font-size: 8px;
-    }
+    .sidebar-title::before { content: '■'; color: var(--blue); font-size: 8px; }
 
-    .mission-log {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
+    .mission-log { display: flex; flex-direction: column; gap: 8px; }
 
     .log-entry {
       padding: 10px 12px;
@@ -186,9 +304,7 @@
       transition: border-color 0.15s;
     }
 
-    .log-entry:hover {
-      border-left-color: var(--blue);
-    }
+    .log-entry:hover { border-left-color: var(--blue); }
 
     .log-entry-meta {
       display: flex;
@@ -196,44 +312,16 @@
       margin-bottom: 4px;
     }
 
-    .log-mode {
-      font-size: 9px;
-      font-weight: 700;
-      letter-spacing: 2px;
-      color: var(--blue);
-    }
+    .log-mode { font-size: 9px; font-weight: 700; letter-spacing: 2px; color: var(--blue); }
+    .log-time { font-size: 9px; color: var(--text-muted); }
+    .log-query { font-size: 11px; color: var(--navy); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-    .log-time {
-      font-size: 9px;
-      color: var(--text-muted);
-    }
+    .sidebar-meta { margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--border); }
+    .sidebar-meta p { font-size: 10px; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 4px; }
 
-    .log-query {
-      font-size: 11px;
-      color: var(--navy);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .sidebar-meta {
-      margin-top: 24px;
-      padding-top: 16px;
-      border-top: 1px solid var(--border);
-    }
-
-    .sidebar-meta p {
-      font-size: 10px;
-      letter-spacing: 1px;
-      color: var(--text-muted);
-      margin-bottom: 4px;
-    }
-
-    /* ── Tab Panels ── */
     .tab-panel { display: none; }
     .tab-panel.active { display: block; }
 
-    /* ── Section Label ── */
     .section-label {
       font-size: 11px;
       font-weight: 700;
@@ -245,15 +333,10 @@
       gap: 8px;
     }
 
-    .section-label::before {
-      content: '►';
-      font-size: 8px;
-    }
+    .section-label::before { content: '►'; font-size: 8px; }
 
-    /* ── Terminal Input ── */
     .input-wrapper {
       display: flex;
-      gap: 0;
       border: 1px solid var(--navy);
       margin-bottom: 8px;
     }
@@ -280,9 +363,7 @@
       color: var(--navy);
     }
 
-    .terminal-input::placeholder {
-      color: var(--text-muted);
-    }
+    .terminal-input::placeholder { color: var(--text-muted); }
 
     .execute-btn {
       padding: 12px 28px;
@@ -298,24 +379,11 @@
     }
 
     .execute-btn:hover { background: var(--navy); }
-    .execute-btn:disabled {
-      background: var(--text-muted);
-      cursor: not-allowed;
-    }
+    .execute-btn:disabled { background: var(--text-muted); cursor: not-allowed; }
 
-    .endpoint-label {
-      font-size: 10px;
-      letter-spacing: 1px;
-      color: var(--text-muted);
-      margin-bottom: 24px;
-    }
+    .endpoint-label { font-size: 10px; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 24px; }
 
-    /* ── Intelligence Briefing (Archive Result) ── */
-    .briefing {
-      border: 1px solid var(--border);
-      display: none;
-    }
-
+    .briefing { border: 1px solid var(--border); display: none; }
     .briefing.visible { display: block; }
 
     .briefing-header {
@@ -327,11 +395,7 @@
       background: var(--off-white);
     }
 
-    .briefing-ref {
-      font-size: 11px;
-      letter-spacing: 2px;
-      color: var(--text-muted);
-    }
+    .briefing-ref { font-size: 11px; letter-spacing: 2px; color: var(--text-muted); }
 
     .declassified-stamp {
       border: 1px solid var(--blue);
@@ -342,86 +406,21 @@
       color: var(--blue);
     }
 
-    .briefing-body {
-      padding: 24px;
-      font-size: 13px;
-      line-height: 1.8;
-      color: var(--navy);
-    }
+    .briefing-body { padding: 24px; font-size: 13px; line-height: 1.8; color: var(--navy); }
+    .briefing-divider { border: none; border-top: 1px dashed var(--border); margin: 20px 0; }
+    .end-of-briefing { font-size: 11px; letter-spacing: 2px; color: var(--text-muted); text-align: center; margin: 16px 0; }
 
-    .briefing-divider {
-      border: none;
-      border-top: 1px dashed var(--border);
-      margin: 20px 0;
-    }
+    .sources-section { padding: 16px 20px; border-top: 1px solid var(--border); background: var(--off-white); }
+    .sources-title { font-size: 10px; font-weight: 700; letter-spacing: 2px; color: var(--text-muted); margin-bottom: 8px; }
+    .source-item { font-size: 11px; color: var(--blue); margin-bottom: 4px; word-break: break-all; }
+    .source-badge { display: inline-block; background: var(--blue); color: var(--white); font-size: 9px; font-weight: 700; padding: 2px 6px; margin-right: 8px; }
 
-    .end-of-briefing {
-      font-size: 11px;
-      letter-spacing: 2px;
-      color: var(--text-muted);
-      text-align: center;
-      margin: 16px 0;
-    }
-
-    /* ── Sources ── */
-    .sources-section {
-      padding: 16px 20px;
-      border-top: 1px solid var(--border);
-      background: var(--off-white);
-    }
-
-    .sources-title {
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 2px;
-      color: var(--text-muted);
-      margin-bottom: 8px;
-    }
-
-    .source-item {
-      font-size: 11px;
-      color: var(--blue);
-      margin-bottom: 4px;
-      word-break: break-all;
-    }
-
-    .source-badge {
-      display: inline-block;
-      background: var(--blue);
-      color: var(--white);
-      font-size: 9px;
-      font-weight: 700;
-      padding: 2px 6px;
-      margin-right: 8px;
-    }
-
-    /* ── Loading State ── */
-    .loading {
-      padding: 40px;
-      text-align: center;
-      display: none;
-    }
-
+    .loading { padding: 40px; text-align: center; display: none; }
     .loading.visible { display: block; }
+    .loading-text { font-size: 12px; letter-spacing: 3px; color: var(--blue); animation: blink 1s step-end infinite; }
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
-    .loading-text {
-      font-size: 12px;
-      letter-spacing: 3px;
-      color: var(--blue);
-      animation: blink 1s step-end infinite;
-    }
-
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0; }
-    }
-
-    /* ── Dossier Profile Card ── */
-    .dossier-card {
-      border: 1px solid var(--border);
-      display: none;
-    }
-
+    .dossier-card { border: 1px solid var(--border); display: none; }
     .dossier-card.visible { display: block; }
 
     .dossier-header {
@@ -434,134 +433,31 @@
       color: var(--white);
     }
 
-    .dossier-subject {
-      font-size: 18px;
-      font-weight: 700;
-      letter-spacing: 3px;
-    }
+    .dossier-subject { font-size: 18px; font-weight: 700; letter-spacing: 3px; }
+    .dossier-status { font-size: 10px; letter-spacing: 2px; padding: 4px 10px; border: 1px solid #3385FF; color: #3385FF; }
 
-    .dossier-status {
-      font-size: 10px;
-      letter-spacing: 2px;
-      padding: 4px 10px;
-      border: 1px solid var(--blue-dim);
-      color: var(--blue-dim);
-    }
+    .dossier-body { padding: 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 
-    .dossier-body {
-      padding: 24px;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-    }
+    .dossier-field { border-left: 2px solid var(--border); padding-left: 12px; }
+    .field-label { font-size: 9px; font-weight: 700; letter-spacing: 2px; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase; }
+    .field-value { font-size: 12px; color: var(--navy); line-height: 1.5; }
+    .field-value.empty { color: var(--text-muted); font-style: italic; }
+    .field-tag { display: inline-block; font-size: 10px; padding: 2px 8px; margin: 2px 2px 2px 0; border: 1px solid var(--border); color: var(--navy); }
 
-    .dossier-field {
-      border-left: 2px solid var(--border);
-      padding-left: 12px;
-    }
+    .scandal-section { border: 1px solid var(--red); margin: 0 24px 24px; padding: 16px; }
+    .scandal-header { font-size: 10px; font-weight: 700; letter-spacing: 2px; color: var(--red); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+    .scandal-header::before { content: '⚠'; }
+    .scandal-item { font-size: 12px; color: var(--navy); margin-bottom: 6px; padding-left: 12px; border-left: 2px solid var(--red); }
 
-    .field-label {
-      font-size: 9px;
-      font-weight: 700;
-      letter-spacing: 2px;
-      color: var(--text-muted);
-      margin-bottom: 4px;
-      text-transform: uppercase;
-    }
+    .dossier-sources { margin: 0 24px 24px; padding-top: 16px; border-top: 1px solid var(--border); }
 
-    .field-value {
-      font-size: 12px;
-      color: var(--navy);
-      line-height: 1.5;
-    }
+    .empty-state { padding: 60px 40px; text-align: center; border: 1px dashed var(--border); }
+    .empty-state p { font-size: 12px; letter-spacing: 2px; color: var(--text-muted); margin-bottom: 8px; }
 
-    .field-value.empty {
-      color: var(--text-muted);
-      font-style: italic;
-    }
-
-    .field-tag {
-      display: inline-block;
-      font-size: 10px;
-      padding: 2px 8px;
-      margin: 2px 2px 2px 0;
-      border: 1px solid var(--border);
-      color: var(--navy);
-    }
-
-    .field-tag.warning {
-      border-color: var(--red);
-      color: var(--red);
-    }
-
-    /* ── Scandal Section ── */
-    .scandal-section {
-      border: 1px solid var(--red);
-      margin: 0 24px 24px;
-      padding: 16px;
-    }
-
-    .scandal-header {
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 2px;
-      color: var(--red);
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .scandal-header::before {
-      content: '⚠';
-    }
-
-    .scandal-item {
-      font-size: 12px;
-      color: var(--navy);
-      margin-bottom: 6px;
-      padding-left: 12px;
-      border-left: 2px solid var(--red);
-    }
-
-    /* ── Sources Section in Dossier ── */
-    .dossier-sources {
-      margin: 0 24px 24px;
-      padding: 16px;
-      border-top: 1px solid var(--border);
-    }
-
-    /* ── Empty State ── */
-    .empty-state {
-      padding: 60px 40px;
-      text-align: center;
-      border: 1px dashed var(--border);
-    }
-
-    .empty-state p {
-      font-size: 12px;
-      letter-spacing: 2px;
-      color: var(--text-muted);
-      margin-bottom: 8px;
-    }
-
-    /* ── Error ── */
-    .error-box {
-      padding: 16px 20px;
-      border: 1px solid var(--red);
-      background: #FFF5F5;
-      display: none;
-    }
-
+    .error-box { padding: 16px 20px; border: 1px solid var(--red); background: #FFF5F5; display: none; }
     .error-box.visible { display: block; }
+    .error-box p { font-size: 12px; color: var(--red); letter-spacing: 1px; }
 
-    .error-box p {
-      font-size: 12px;
-      color: var(--red);
-      letter-spacing: 1px;
-    }
-
-    /* ── Footer ── */
     footer {
       display: flex;
       justify-content: space-between;
@@ -571,179 +467,155 @@
       background: var(--off-white);
     }
 
-    footer p {
-      font-size: 10px;
-      letter-spacing: 1px;
-      color: var(--text-muted);
-    }
-
-    /* ── Typewriter Animation ── */
-    .typewriter {
-      overflow: hidden;
-      white-space: pre-wrap;
-      word-wrap: break-word;
-    }
+    footer p { font-size: 10px; letter-spacing: 1px; color: var(--text-muted); }
   </style>
 </head>
 <body>
 
-  <!-- Navigation -->
-  <nav>
-    <div class="nav-logo">
-      <div class="logo-box">S</div>
-      <div class="logo-text">
-        <h1>STIG</h1>
-        <p>Sovereign Truth & Intelligence Gateway</p>
+  <!-- ══ HOME SCREEN ══ -->
+  <div class="view active" id="view-home">
+    <div class="home-grid"></div>
+    <div class="home-classification">CLEARANCE LEVEL: PUBLIC</div>
+
+    <div class="home-content">
+      <div class="home-logo-box">S</div>
+      <div>
+        <div class="home-title">STIG</div>
+        <div class="home-subtitle">Sovereign Truth & Intelligence Gateway</div>
+      </div>
+      <div class="home-divider"></div>
+      <div class="home-tagline">Nigeria's Truth. <span>Declassified.</span></div>
+      <div class="home-buttons">
+        <button class="home-btn home-btn-primary" onclick="enterApp('archive')">ARCHIVE</button>
+        <button class="home-btn home-btn-secondary" onclick="enterApp('dossier')">DOSSIER</button>
       </div>
     </div>
 
-    <div class="nav-tabs">
-      <button class="nav-tab active" onclick="switchTab('archive')" id="tab-archive">ARCHIVE</button>
-      <button class="nav-tab" onclick="switchTab('dossier')" id="tab-dossier">DOSSIER</button>
-    </div>
+    <div class="home-footer">STIG INTELLIGENCE SYSTEM v1.0 &nbsp;·&nbsp; ALL DATA SOURCED FROM PUBLIC RECORDS</div>
+  </div>
 
-    <div class="nav-right">
-      <span class="session-id" id="session-id">SESSION: NG-000000</span>
-      <span class="clearance-badge">CLEARANCE LEVEL: PUBLIC</span>
-    </div>
-  </nav>
+  <!-- ══ MAIN APP ══ -->
+  <div class="view" id="view-app">
 
-  <!-- Main -->
-  <div class="main">
-
-    <!-- Content -->
-    <div class="content">
-
-      <!-- ARCHIVE Tab -->
-      <div class="tab-panel active" id="panel-archive">
-        <div class="section-label">QUERY NIGERIAN HISTORICAL RECORDS</div>
-
-        <div class="input-wrapper">
-          <span class="terminal-prefix">&gt;</span>
-          <input
-            class="terminal-input"
-            id="archive-input"
-            type="text"
-            placeholder="e.g. What happened on June 12, 1993?"
-            onkeydown="if(event.key==='Enter') executeArchive()"
-          />
-          <button class="execute-btn" id="archive-btn" onclick="executeArchive()">EXECUTE</button>
+    <nav>
+      <a class="nav-logo" onclick="goHome()">
+        <div class="logo-box">S</div>
+        <div class="logo-text">
+          <h1>STIG</h1>
+          <p>Sovereign Truth & Intelligence Gateway</p>
         </div>
+      </a>
 
-        <p class="endpoint-label">POST /ask · RESPONSES COMPILED FROM PUBLIC RECORDS ONLY</p>
+      <div class="nav-tabs">
+        <button class="nav-tab active" onclick="switchTab('archive')" id="tab-archive">ARCHIVE</button>
+        <button class="nav-tab" onclick="switchTab('dossier')" id="tab-dossier">DOSSIER</button>
+      </div>
 
-        <!-- Loading -->
-        <div class="loading" id="archive-loading">
-          <p class="loading-text">RETRIEVING CLASSIFIED DATA...</p>
-        </div>
+      <div class="nav-right">
+        <span class="session-id" id="session-id">SESSION: NG-000000</span>
+        <span class="clearance-badge">CLEARANCE LEVEL: PUBLIC</span>
+      </div>
+    </nav>
 
-        <!-- Error -->
-        <div class="error-box" id="archive-error">
-          <p id="archive-error-msg"></p>
-        </div>
+    <div class="main">
+      <div class="content">
 
-        <!-- Result -->
-        <div class="briefing" id="archive-result">
-          <div class="briefing-header">
-            <span class="briefing-ref" id="briefing-ref">INTELLIGENCE BRIEFING // QUERY REF: NG-0000</span>
-            <span class="declassified-stamp">DECLASSIFIED</span>
+        <!-- ARCHIVE Tab -->
+        <div class="tab-panel active" id="panel-archive">
+          <div class="section-label">QUERY NIGERIAN HISTORICAL RECORDS</div>
+          <div class="input-wrapper">
+            <span class="terminal-prefix">&gt;</span>
+            <input class="terminal-input" id="archive-input" type="text"
+              placeholder="e.g. What happened on June 12, 1993?"
+              onkeydown="if(event.key==='Enter') executeArchive()" />
+            <button class="execute-btn" id="archive-btn" onclick="executeArchive()">EXECUTE</button>
           </div>
-          <div class="briefing-body">
-            <div class="typewriter" id="briefing-text"></div>
-            <hr class="briefing-divider">
-            <p class="end-of-briefing">— END OF BRIEFING —</p>
+          <p class="endpoint-label">POST /ask · RESPONSES COMPILED FROM PUBLIC RECORDS ONLY</p>
+
+          <div class="loading" id="archive-loading">
+            <p class="loading-text">RETRIEVING CLASSIFIED DATA...</p>
           </div>
-          <div class="sources-section" id="archive-sources"></div>
+          <div class="error-box" id="archive-error">
+            <p id="archive-error-msg"></p>
+          </div>
+          <div class="briefing" id="archive-result">
+            <div class="briefing-header">
+              <span class="briefing-ref" id="briefing-ref">INTELLIGENCE BRIEFING</span>
+              <span class="declassified-stamp">DECLASSIFIED</span>
+            </div>
+            <div class="briefing-body">
+              <div id="briefing-text"></div>
+              <hr class="briefing-divider">
+              <p class="end-of-briefing">— END OF BRIEFING —</p>
+            </div>
+            <div class="sources-section" id="archive-sources"></div>
+          </div>
+          <div class="empty-state" id="archive-empty">
+            <p>HISTORICAL RECORDS INDEX ONLINE</p>
+            <p>AWAITING OPERATOR INPUT_</p>
+          </div>
         </div>
 
-        <!-- Empty State -->
-        <div class="empty-state" id="archive-empty">
-          <p>HISTORICAL RECORDS INDEX ONLINE</p>
-          <p>AWAITING OPERATOR INPUT_</p>
+        <!-- DOSSIER Tab -->
+        <div class="tab-panel" id="panel-dossier">
+          <div class="section-label">RETRIEVE SUBJECT INTELLIGENCE FILE</div>
+          <div class="input-wrapper">
+            <span class="terminal-prefix">&gt;</span>
+            <input class="terminal-input" id="dossier-input" type="text"
+              placeholder="ENTER SUBJECT NAME — e.g. Sani Abacha"
+              onkeydown="if(event.key==='Enter') executeDossier()" />
+            <button class="execute-btn" id="dossier-btn" onclick="executeDossier()">EXECUTE</button>
+          </div>
+          <p class="endpoint-label">POST /infocard · INTELLIGENCE COMPILED FROM OPEN SOURCE RECORDS</p>
+
+          <div class="loading" id="dossier-loading">
+            <p class="loading-text">DECLASSIFYING SUBJECT FILE...</p>
+          </div>
+          <div class="error-box" id="dossier-error">
+            <p id="dossier-error-msg"></p>
+          </div>
+          <div class="dossier-card" id="dossier-result">
+            <div class="dossier-header">
+              <span class="dossier-subject" id="dossier-name"></span>
+              <span class="dossier-status">FILE DECLASSIFIED</span>
+            </div>
+            <div class="dossier-body" id="dossier-fields"></div>
+            <div class="scandal-section" id="scandal-section" style="display:none">
+              <div class="scandal-header">FLAGGED INCIDENTS & COURT CASES</div>
+              <div id="scandal-list"></div>
+            </div>
+            <div class="dossier-sources" id="dossier-sources"></div>
+          </div>
+          <div class="empty-state" id="dossier-empty">
+            <p>SUBJECT DATABASE ONLINE</p>
+            <p>ENTER SUBJECT NAME TO RETRIEVE INTELLIGENCE FILE_</p>
+          </div>
         </div>
+
       </div>
 
-      <!-- DOSSIER Tab -->
-      <div class="tab-panel" id="panel-dossier">
-        <div class="section-label">RETRIEVE SUBJECT INTELLIGENCE FILE</div>
-
-        <div class="input-wrapper">
-          <span class="terminal-prefix">&gt;</span>
-          <input
-            class="terminal-input"
-            id="dossier-input"
-            type="text"
-            placeholder="ENTER SUBJECT NAME — e.g. Sani Abacha"
-            onkeydown="if(event.key==='Enter') executeDossier()"
-          />
-          <button class="execute-btn" id="dossier-btn" onclick="executeDossier()">EXECUTE</button>
+      <div class="sidebar">
+        <div class="sidebar-title">RECENT QUERIES — MISSION LOG</div>
+        <div class="mission-log" id="mission-log">
+          <p style="font-size:11px;color:var(--text-muted);letter-spacing:1px;">NO QUERIES YET</p>
         </div>
-
-        <p class="endpoint-label">POST /infocard · INTELLIGENCE COMPILED FROM OPEN SOURCE RECORDS</p>
-
-        <!-- Loading -->
-        <div class="loading" id="dossier-loading">
-          <p class="loading-text">DECLASSIFYING SUBJECT FILE...</p>
-        </div>
-
-        <!-- Error -->
-        <div class="error-box" id="dossier-error">
-          <p id="dossier-error-msg"></p>
-        </div>
-
-        <!-- Result -->
-        <div class="dossier-card" id="dossier-result">
-          <div class="dossier-header">
-            <span class="dossier-subject" id="dossier-name"></span>
-            <span class="dossier-status">FILE DECLASSIFIED</span>
-          </div>
-
-          <div class="dossier-body" id="dossier-fields"></div>
-
-          <div class="scandal-section" id="scandal-section" style="display:none">
-            <div class="scandal-header">FLAGGED INCIDENTS & COURT CASES</div>
-            <div id="scandal-list"></div>
-          </div>
-
-          <div class="dossier-sources" id="dossier-sources"></div>
-        </div>
-
-        <!-- Empty State -->
-        <div class="empty-state" id="dossier-empty">
-          <p>SUBJECT DATABASE ONLINE</p>
-          <p>ENTER SUBJECT NAME TO RETRIEVE INTELLIGENCE FILE_</p>
+        <div class="sidebar-meta">
+          <p id="sidebar-session">SESSION: NG-000000</p>
+          <p>OPERATOR: ANONYMOUS</p>
+          <p>LOG RETENTION: SESSION</p>
         </div>
       </div>
-
     </div>
 
-    <!-- Sidebar -->
-    <div class="sidebar">
-      <div class="sidebar-title">RECENT QUERIES — MISSION LOG</div>
-      <div class="mission-log" id="mission-log">
-        <p style="font-size:11px;color:var(--text-muted);letter-spacing:1px;">NO QUERIES YET</p>
-      </div>
-
-      <div class="sidebar-meta">
-        <p id="sidebar-session">SESSION: NG-000000</p>
-        <p>OPERATOR: ANONYMOUS</p>
-        <p>LOG RETENTION: SESSION</p>
-      </div>
-    </div>
+    <footer>
+      <p>STIG INTELLIGENCE SYSTEM v1.0</p>
+      <p>ALL DATA SOURCED FROM PUBLIC RECORDS</p>
+    </footer>
 
   </div>
 
-  <!-- Footer -->
-  <footer>
-    <p>STIG INTELLIGENCE SYSTEM v1.0</p>
-    <p>ALL DATA SOURCED FROM PUBLIC RECORDS</p>
-  </footer>
-
   <script>
-    /* ── Config ── */
     const API_BASE = 'http://localhost:8000';
-
-    /* ── State ── */
     let queryLog = [];
     let queryCount = 0;
 
@@ -755,68 +627,84 @@
     }
     generateSession();
 
+    /* ── View Navigation ── */
+    function enterApp(tab) {
+      document.getElementById('view-home').classList.remove('active');
+      document.getElementById('view-app').classList.add('active');
+      switchTab(tab);
+    }
+
+    function goHome() {
+      document.getElementById('view-app').classList.remove('active');
+      document.getElementById('view-home').classList.add('active');
+    }
+
     /* ── Tab Switching ── */
     function switchTab(tab) {
-      // Hide all panels
       document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
       document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-
-      // Show selected
       document.getElementById('panel-' + tab).classList.add('active');
       document.getElementById('tab-' + tab).classList.add('active');
     }
 
     /* ── Mission Log ── */
     function addToLog(mode, query) {
-      const now = new Date();
-      const time = now.toTimeString().slice(0, 8);
-
+      const time = new Date().toTimeString().slice(0, 8);
       queryLog.unshift({ mode, query, time });
       if (queryLog.length > 5) queryLog.pop();
-
-      const logEl = document.getElementById('mission-log');
-      logEl.innerHTML = queryLog.map(entry => `
+      document.getElementById('mission-log').innerHTML = queryLog.map(e => `
         <div class="log-entry">
           <div class="log-entry-meta">
-            <span class="log-mode">${entry.mode}</span>
-            <span class="log-time">${entry.time}</span>
+            <span class="log-mode">${e.mode}</span>
+            <span class="log-time">${e.time}</span>
           </div>
-          <div class="log-query">${entry.query.toUpperCase()}</div>
+          <div class="log-query">${e.query.toUpperCase()}</div>
         </div>
       `).join('');
     }
 
-    /* ── Query Reference Generator ── */
+    /* ── Query Ref ── */
     function generateRef(query) {
       queryCount++;
-      const slug = query.split(' ').slice(0, 3).map(w => w.toUpperCase().replace(/[^A-Z0-9]/g, '')).join('-');
+      const slug = query.split(' ').slice(0, 3)
+        .map(w => w.toUpperCase().replace(/[^A-Z0-9]/g, '')).join('-');
       return `INTELLIGENCE BRIEFING // QUERY REF: NG-${String(queryCount).padStart(4,'0')}-${slug}`;
     }
 
-    /* ── Typewriter Effect ── */
-    function typewrite(el, text, speed = 8) {
+    /* ── Typewriter ── */
+    function typewrite(el, text, speed = 6) {
       return new Promise(resolve => {
         el.textContent = '';
         let i = 0;
         function tick() {
-          if (i < text.length) {
-            el.textContent += text[i++];
-            setTimeout(tick, speed);
-          } else {
-            resolve();
-          }
+          if (i < text.length) { el.textContent += text[i++]; setTimeout(tick, speed); }
+          else resolve();
         }
         tick();
       });
     }
 
-    /* ── ARCHIVE — Execute ── */
+    /* ── Parse answer and sources ── */
+    function parseAnswer(raw) {
+      const sourcesMatch = raw.match(/Sources?:\s*([\s\S]+)$/i);
+      let answer = raw;
+      let sources = [];
+      if (sourcesMatch) {
+        answer = raw.slice(0, sourcesMatch.index).trim();
+        sources = sourcesMatch[1]
+          .split('\n')
+          .map(s => s.replace(/^[-•*\s]+/, '').trim())
+          .filter(s => s.startsWith('http'));
+      }
+      return { answer, sources };
+    }
+
+    /* ── ARCHIVE ── */
     async function executeArchive() {
       const input = document.getElementById('archive-input');
       const question = input.value.trim();
       if (!question) return;
 
-      // UI state
       const btn = document.getElementById('archive-btn');
       btn.disabled = true;
       btn.textContent = 'PROCESSING...';
@@ -829,35 +717,34 @@
       addToLog('ARCHIVE', question);
 
       try {
-        // Call FastAPI backend
         const response = await fetch(`${API_BASE}/ask`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ question })
         });
-
         if (!response.ok) throw new Error(`SERVER ERROR ${response.status}`);
-
         const data = await response.json();
-        const answer = data.answer || 'NO DATA RETRIEVED';
+
+        const { answer, sources } = parseAnswer(data.answer || 'NO DATA RETRIEVED');
         const cached = data.cached || false;
 
-        // Hide loading
         document.getElementById('archive-loading').classList.remove('visible');
-
-        // Set briefing reference
-        document.getElementById('briefing-ref').textContent = generateRef(question) + (cached ? ' [CACHED]' : '');
-
-        // Show result
+        document.getElementById('briefing-ref').textContent =
+          generateRef(question) + (cached ? ' [CACHED]' : '');
         document.getElementById('archive-result').classList.add('visible');
 
-        // Typewriter animation
-        const textEl = document.getElementById('briefing-text');
-        await typewrite(textEl, answer);
+        await typewrite(document.getElementById('briefing-text'), answer);
 
-        // Sources section
-        const sourcesEl = document.getElementById('archive-sources');
-        sourcesEl.innerHTML = `<div class="sources-title">CITED SOURCES</div>`;
+        /* render sources */
+        const srcEl = document.getElementById('archive-sources');
+        if (sources.length > 0) {
+          srcEl.innerHTML = `<div class="sources-title">CITED SOURCES</div>` +
+            sources.map((s, i) =>
+              `<div class="source-item"><span class="source-badge">SOURCE ${i+1}</span>${s}</div>`
+            ).join('');
+        } else {
+          srcEl.innerHTML = '<div class="sources-title">CITED SOURCES</div><p style="font-size:11px;color:var(--text-muted)">NO EXTERNAL SOURCES CITED</p>';
+        }
 
       } catch (err) {
         document.getElementById('archive-loading').classList.remove('visible');
@@ -866,18 +753,16 @@
           '⚠ CONNECTION FAILED: ' + err.message + ' — VERIFY BACKEND IS RUNNING ON localhost:8000';
       }
 
-      // Reset button
       btn.disabled = false;
       btn.textContent = 'EXECUTE';
     }
 
-    /* ── DOSSIER — Execute ── */
+    /* ── DOSSIER ── */
     async function executeDossier() {
       const input = document.getElementById('dossier-input');
       const name = input.value.trim();
       if (!name) return;
 
-      // UI state
       const btn = document.getElementById('dossier-btn');
       btn.disabled = true;
       btn.textContent = 'RETRIEVING...';
@@ -890,87 +775,60 @@
       addToLog('DOSSIER', name);
 
       try {
-        // Call FastAPI backend
         const response = await fetch(`${API_BASE}/infocard`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ name })
         });
-
         if (!response.ok) throw new Error(`SERVER ERROR ${response.status}`);
-
         const profile = await response.json();
 
-        // Hide loading
         document.getElementById('dossier-loading').classList.remove('visible');
-
-        // Populate dossier
         document.getElementById('dossier-name').textContent = (profile.name || name).toUpperCase();
 
-        // Core fields
         const fields = [
-          { label: 'DATE OF BIRTH', value: profile.date_of_birth },
-          { label: 'DATE OF DEATH', value: profile.date_of_death },
-          { label: 'STATE OF ORIGIN', value: profile.state_of_origin },
-          { label: 'PARTY / AFFILIATION', value: profile.party },
-          { label: 'OFFICES HELD', value: profile.offices_held },
-          { label: 'TENURE DATES', value: profile.tenure_dates },
-          { label: 'ALLIES', value: profile.allies },
-          { label: 'KNOWN ENEMIES', value: profile.enemies },
-          { label: 'BUSINESS PARTNERS', value: profile.business_partners },
+          { label: 'DATE OF BIRTH',      value: profile.date_of_birth },
+          { label: 'DATE OF DEATH',      value: profile.date_of_death },
+          { label: 'STATE OF ORIGIN',    value: profile.state_of_origin },
+          { label: 'PARTY / AFFILIATION',value: profile.party },
+          { label: 'OFFICES HELD',       value: profile.offices_held },
+          { label: 'TENURE DATES',       value: profile.tenure_dates },
+          { label: 'ALLIES',             value: profile.allies },
+          { label: 'KNOWN ENEMIES',      value: profile.enemies },
+          { label: 'BUSINESS PARTNERS',  value: profile.business_partners },
           { label: 'NOTABLE STATEMENTS', value: profile.notable_statements },
-          { label: 'INTERESTING FACTS', value: profile.any_other_interesting_facts },
-          { label: 'NEWS MENTIONS', value: profile.news_mentions },
+          { label: 'INTERESTING FACTS',  value: profile.any_other_interesting_facts },
         ];
 
-        const fieldsEl = document.getElementById('dossier-fields');
-        fieldsEl.innerHTML = fields.map(f => {
-          let displayValue = '';
-
-          if (!f.value || (Array.isArray(f.value) && f.value.length === 0)) {
-            displayValue = '<span class="field-value empty">NO DATA</span>';
+        document.getElementById('dossier-fields').innerHTML = fields.map(f => {
+          let val = '';
+          if (!f.value || (Array.isArray(f.value) && f.value.length === 0) || f.value === null) {
+            val = '<span class="field-value empty">NO DATA</span>';
           } else if (Array.isArray(f.value)) {
-            displayValue = f.value.map(v =>
-              `<span class="field-tag">${v}</span>`
-            ).join('');
+            val = f.value.map(v => `<span class="field-tag">${v}</span>`).join('');
           } else {
-            displayValue = `<span class="field-value">${f.value}</span>`;
+            val = `<span class="field-value">${f.value}</span>`;
           }
-
-          return `
-            <div class="dossier-field">
-              <div class="field-label">${f.label}</div>
-              <div>${displayValue}</div>
-            </div>
-          `;
+          return `<div class="dossier-field"><div class="field-label">${f.label}</div><div>${val}</div></div>`;
         }).join('');
 
-        // Scandals & Court Cases
         const scandals = [...(profile.scandals || []), ...(profile.court_cases || [])];
         if (scandals.length > 0) {
           document.getElementById('scandal-section').style.display = 'block';
-          document.getElementById('scandal-list').innerHTML = scandals.map(s =>
-            `<div class="scandal-item">${s}</div>`
-          ).join('');
+          document.getElementById('scandal-list').innerHTML =
+            scandals.map(s => `<div class="scandal-item">${s}</div>`).join('');
         } else {
           document.getElementById('scandal-section').style.display = 'none';
         }
 
-        // Sources
         const sources = profile.sources || [];
-        const sourcesEl = document.getElementById('dossier-sources');
-        if (sources.length > 0) {
-          sourcesEl.innerHTML = `
-            <div class="sources-title">INTELLIGENCE SOURCES</div>
-            ${sources.map((s, i) =>
+        document.getElementById('dossier-sources').innerHTML = sources.length > 0
+          ? `<div class="sources-title">INTELLIGENCE SOURCES</div>` +
+            sources.map((s, i) =>
               `<div class="source-item"><span class="source-badge">SOURCE ${i+1}</span>${s}</div>`
-            ).join('')}
-          `;
-        } else {
-          sourcesEl.innerHTML = '';
-        }
+            ).join('')
+          : '';
 
-        // Show result
         document.getElementById('dossier-result').classList.add('visible');
 
       } catch (err) {
@@ -980,7 +838,6 @@
           '⚠ CONNECTION FAILED: ' + err.message + ' — VERIFY BACKEND IS RUNNING ON localhost:8000';
       }
 
-      // Reset button
       btn.disabled = false;
       btn.textContent = 'EXECUTE';
     }
