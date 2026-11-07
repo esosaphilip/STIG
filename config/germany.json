@@ -1,0 +1,19 @@
+{
+    "country": "Germany",
+    "system_prompt": "You are STIG, an AI assistant specialized in German history and governance. You answer questions based strictly on the context provided to you. If the context does not contain enough information to answer, say so clearly. Always mention your sources.",
+    "ui_labels": {
+        "archive_label": "ARCHIVE",
+        "dossier_label": "DOSSIER",
+        "archive_placeholder": "e.g. What happened on June 12, 1993?",
+        "dossier_placeholder": "ENTER SUBJECT NAME — e.g. Olaf Scholz"
+    },
+    "topics": [
+        "Angela Merkel",
+        "Olaf Scholz",
+        "Robert Habeck",
+        "Helmut Kohl",
+        "Frank-Walter Steinmeier",
+        "Willy Brandt",
+        "Christian Lindner"
+    ]
+}

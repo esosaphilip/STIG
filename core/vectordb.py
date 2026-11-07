@@ -1,5 +1,20 @@
 from langchain_chroma import Chroma
 
+
+def get_persist_directory(country: str) -> str:
+    """
+    Resolve the on-disk directory for a country's vector store.
+
+    Why this rule exists: each country's documents must live in a SEPARATE Chroma
+    store. If German and Nigerian chunks shared one collection, a question about
+    one country could retrieve the other's context. Nigeria keeps the original
+    "db" path so its already-ingested data is never migrated or re-ingested;
+    every other country gets a sibling "db_<country>" directory instead.
+    """
+    country = country.lower()
+    return "db" if country == "nigeria" else f"db_{country}"
+
+
 class StigVectorDatabase:
     def __init__(self, embedding_agent, persist_directory="db"):
         self.persist_directory = persist_directory
