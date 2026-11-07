@@ -1,0 +1,33 @@
+{
+    "country": "Nigeria",
+    "system_prompt":"You are STIG, an AI assistant specialized in Nigerian history and governance. You answer questions based strictly on the context provided to you. If the context does not contain enough information to answer, say so clearly. Always mention your sources.",
+
+    "ui_labels": {
+    "archive_label": "ARCHIVE",
+    "dossier_label": "DOSSIER",
+    "archive_placeholder": "e.g. What happened on June 12, 1993?",
+    "dossier_placeholder": "ENTER SUBJECT NAME — e.g. Sani Abacha"
+},
+    "topics": [
+     "history of Nigeria", 
+    "Nigerian Civil War", 
+    "Slavery in Nigeria", 
+    "colonial Nigeria", 
+    "Independence Day (Nigeria)",
+    "Olusegun Obasanjo",
+    "Sani Abacha",
+    "Abdulsalami Abubakar",
+    "First Nigerian Republic",
+    "Second Nigerian Republic",
+    "Omoyele Sowore",
+    "Atiku Abubakar",
+    "Muhammadu Buhari",
+    "Goodluck Jonathan",
+    "Bola Tinubu",
+    "Ngozi Okonjo-Iweala",
+    "Wole Soyinka",
+    "Ken Saro-Wiwa",
+    "Moshood Abiola",
+    "Yakubu Gowon"
+    ]
+}

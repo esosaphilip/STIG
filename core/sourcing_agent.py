@@ -15,6 +15,9 @@ load_dotenv()  # Load environment variables from .env file
 # Step 1 — Define the State Schema
 class PoliticianState(TypedDict):
     name: str
+    # Optional country hint. "" means a genuinely global, unbiased web search;
+    # a concrete value narrows the search to disambiguate common names.
+    country: str
     date_of_birth: str
     date_of_death: str
     state_of_origin: str
@@ -70,22 +73,31 @@ def search_web(state: PoliticianState) -> dict:
     
     # 1. get name from state
     politician_name = state["name"]
-    # 2. create Tavily client using env variable
+    # 2. build the query. Without a country we search globally and stay unbiased;
+    # with one we append it to narrow a common name. Previously "Nigeria" was
+    # hardcoded into every query, which biased every lookup toward Nigeria and
+    # broke non-Nigerian subjects.
+    country = state.get("country", "")
+    if country:
+        query = f'"{politician_name}" {country} politician scandal history'
+    else:
+        query = f'"{politician_name}" politician scandal history'
+    # 3. create Tavily client using env variable
     tavily_client = TavilyClient(api_key=os.getenv("TAVILY_API_KEY"))
-    # 3. search for politician scandals and news
+    # 4. search for politician scandals and news
     response = tavily_client.search(
-    query=f'"{politician_name}" Nigeria politician scandal history',
+    query=query,
     limit=10
     )
-    # 4. extract content from results
+    # 5. extract content from results
     # result["results"] is a list
     # each item has "content" and "url"
     extracted_contented = [result["content"] for result in response.get("results", [])]
-    # 5. join all content into raw_news_text
+    # 6. join all content into raw_news_text
     raw_news_text = "\n\n".join(extracted_contented)
-    # 6. collect all URLs
+    # 7. collect all URLs
     sources = [result["url"] for result in response.get("results", [])]
-    # 7. return updated fields only
+    # 8. return updated fields only
     return {
         "raw_news_text": raw_news_text,
         "sources": state.get("sources", []) + sources
@@ -171,6 +183,7 @@ if __name__ == "__main__":
     # run it with a starting state
     result = agent.invoke({
         "name": "Sani Abacha",
+        "country": "",
         "date_of_birth": "",
         "date_of_death": "",
         "state_of_origin": "",
