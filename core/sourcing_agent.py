@@ -152,7 +152,18 @@ def verify_citations(extracted: dict, real_sources: list[str]) -> dict:
     No LLM call and no network here — plain Python, so it's unit-testable without
     Ollama running.
     """
-    real_source_set = set(real_sources)
+    # Compare on a normalized form, not exact string equality: a model that
+    # points at the right page but adds a URL fragment (e.g. "#Corruption") or a
+    # trailing slash is citing a real source, not inventing one. Stripping the
+    # fragment/query before comparing fixes that false negative while keeping the
+    # actual guarantee intact — a URL that isn't a real collected source at all
+    # still gets rejected either way.
+    def _normalize(url: str) -> str:
+        if not isinstance(url, str):
+            return ""
+        return url.split("#", 1)[0].split("?", 1)[0].rstrip("/")
+
+    real_source_set = {_normalize(s) for s in real_sources}
     cleaned = dict(extracted)
 
     for field in CLAIM_FIELDS:
@@ -178,7 +189,7 @@ def verify_citations(extracted: dict, real_sources: list[str]) -> dict:
                 )
                 continue
             source = claim.get("source")
-            if source in real_source_set:
+            if _normalize(source) in real_source_set:
                 kept.append(claim)
             else:
                 print(
